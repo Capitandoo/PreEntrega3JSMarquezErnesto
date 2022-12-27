@@ -1,66 +1,74 @@
 //Variables
 const productos = [
-    {nombre: "harina", precio: 50},
-    {nombre: "galletitas", precio: 100},
-    {nombre: "cerveza", precio: 150},
-    {nombre: "leche", precio: 200},
-    {nombre: "gaseosa", precio: 250},
+    {nombre: "Supreme Plus", precio: 50, img: "./Imagenes/supremePlus.webp"},
+    {nombre: "Revitalift", precio: 100, img: "./Imagenes/cremaRevitalift.webp"},
+    {nombre: "Garnier", precio: 150, img: "./Imagenes/garnier.webp"},
+    {nombre: "Agnes", precio: 200, img: "./Imagenes/agnes.jpg"},
+    {nombre: "Antiarrugas", precio: 250, img: "./Imagenes/cremaAntiarrugas.webp"},
+    {nombre: "Vichy", precio: 300, img: "./Imagenes/vichy.jpg"},
 ];
 let carrito = [];
-let seleccion = prompt ("hola desea comprar algun producto? si o no");
+const shopContent = document.querySelector (".shop-content");
+let boton = document.querySelectorAll ('.boton');
+const verCarrito = document.querySelector ('.header__cartIcon');
+const modal = document.querySelector ('.modal-container');
 
-while (seleccion != "si" && seleccion != "no"){
-    alert("por favor ingresa si o no");
-    seleccion = prompt ("hola desea comprar algo? si o no");
-}
-
-if (seleccion == "si"){
-    alert("a continuacion nuestra lista de productos");
-    let todosLosProductos = productos.map ((producto) => producto.nombre + " " + "$" + producto.precio);
-    alert(todosLosProductos.join(" - "));
-}else if (seleccion == "no"){
-    alert("gracais por visitarnos, hasta pronto");
-}
-
-while (seleccion != "no"){
-    let producto = prompt ("agrega un producto a tu carrito");
-    let precio = 0;
-    if (producto == "harina" || producto == "galletitas" || producto == "cerveza" || producto == "leche" || producto == "gaseosa"){
-        switch (producto){
-            case "harina":
-                precio = 50;
-                break;
-                case "galletitas":
-                    precio = 100;
-                    break;
-                    case "cerveza":
-                        precio = 150;
-                        break;
-                        case "leche":
-                            precio = 200;
-                            break;
-                            case "gaseosa":
-                                precio = 250;
-                                break;
-                                default:
-                                    break;
-        }
-        let unidades = parseInt (prompt ("cuantas unidades queres llevar?"));
-        carrito.push ({producto, unidades, precio});
-    }else {
-        alert("no tenemos ese producto");
-    }
-
-    seleccion = prompt ("desea seguir comprando?");
+productos.forEach ((producto) => {
+    let content = document.createElement ("div");
+    content.className = "card";
+    content.innerHTML = `
+    <img src = "${producto.img}">
+    <h3>${producto.nombre}</h3>
+    <p class = "price">$ ${producto.precio}</p>
+    `;
+    shopContent.append (content);
     
-    while (seleccion === "no"){
-        alert("gracias por la compra! hasta pronto");
-        carrito.forEach ((carritoFinal) => {
-            alert(`producto: ${carritoFinal.producto}, unidades: ${carritoFinal.unidades}, total a pagar por producto: ${carritoFinal.unidades * carritoFinal.precio}`)
-        })
-        break;
-    }
-}
+    let comprar = document.createElement ("button");
+    comprar.className = "comprar";
+    comprar.innerText = "comprar";
+    content.append (comprar);
+    
+    comprar.addEventListener ("click", () => {
+        carrito.push ({
+            img: producto.img,
+            nombre: producto.nombre,
+            precio: producto.precio,
+        });
+    })
+});
 
-const total = carrito.reduce ((acum, el) => acum + el.precio * el.unidades, 0);
-alert(`el total a pagar de su compra es: ${total}`);
+verCarrito.addEventListener (("click"), () => {
+    modal.innerHTML = "";
+    modal.style.display = "flex";
+    const modalHeader = document.createElement ("div");
+    modalHeader.className = "modal-header";
+    modalHeader.innerHTML = `<h1 class = "modal-header-title">Carrito</h1>`;
+    modal.append (modalHeader);
+
+    const modalBorrar = document.createElement ("h2");
+    modalBorrar.className = "modal-borrar";
+    modalBorrar.innerText = "X";
+    modalHeader.append (modalBorrar);
+
+    modalBorrar.addEventListener ("click", () => {
+        modal.style.display = "none";
+    });
+
+    carrito.forEach ((producto) => {
+        let contenidoCarrito = document.createElement ("div");
+        contenidoCarrito.className = "modal-container";
+        contenidoCarrito.innerHTML = `
+            <img src = "${producto.img}">
+            <h3>${producto.nombre} </h3>
+            <p>$ ${Number (producto.precio)} </p>
+        `;
+        modal.append (contenidoCarrito);
+    });    
+
+    const total = carrito.reduce((acc, el) => acc + el.precio, 0);
+    const totalCompra = document.createElement ("div");
+    totalCompra.className = "total-content";
+    totalCompra.innerHTML = `Total a pagar: $ ${total}`;
+    modal.append (totalCompra);
+});
+

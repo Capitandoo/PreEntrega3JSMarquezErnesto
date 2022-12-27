@@ -1,0 +1,98 @@
+@media only screen and (min-width: 400px) and (max-width: 450px){
+    .cuerpo__fd{
+        background-color: $fondo-primario;
+        .encabezado{
+            background-size: 100%;
+            background-attachment: scroll;
+            .nav-link{
+                color: #464444;
+            }
+            .active{
+                color: whitesmoke;
+            }
+        }
+        .contenedorSeccion{
+            background-attachment: scroll;
+            .tratamiento{
+                .conoceMas{
+                    font-size: 1rem;
+                }
+            }
+        }
+
+    }
+    .contacto{
+        .contenedorTituloContactate{
+            .tituloContactate{
+                font-size: 30px;
+            }
+        }
+        .contenedorContacto{
+            .formulario{
+                padding: 1.5em 1em;
+            }
+        }
+    }
+    .contenedorLole{
+        .contenedorTituloLole{
+            .tituloLole{
+                font-size: 30px;
+            }
+        }
+        .fila{
+            .imagenLole{
+                width: 200px;
+            }
+            .parrafoLole{
+                font-size: 30px;
+            }
+        }
+    }
+    .tratamientos{
+        max-width: 380px;
+    }
+    .footer{
+        .enlaces{
+            .navFooter{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                .navFooterItem{
+                    font-size: 1rem;
+                    padding: 0.625rem;
+                }
+            }
+            .socialFooter{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                .fa-brands{
+                    font-size: 30px;
+                    color: white;
+                    text-decoration: none;
+                }
+                .fa-whatsapp{
+                    padding-right: 10px;
+                }
+                .fa-instagram{
+                    padding-left: 0px;
+                }
+                .textoSocialFooter{
+                    font-size: 10px;
+                    color: white;
+                }
+            }
+        }
+        .derechos{
+            display: flex;
+            justify-content: space-between;
+            padding-top: 10px;
+            .copy{
+                font-size: 0.75rem;
+            }
+            .leyenda{
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
