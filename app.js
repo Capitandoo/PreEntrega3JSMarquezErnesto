@@ -1,17 +1,18 @@
 //Variables
 const productos = [
-    {nombre: "Supreme Plus", precio: 50, img: "./Imagenes/supremePlus.webp"},
-    {nombre: "Revitalift", precio: 100, img: "./Imagenes/cremaRevitalift.webp"},
-    {nombre: "Garnier", precio: 150, img: "./Imagenes/garnier.webp"},
-    {nombre: "Agnes", precio: 200, img: "./Imagenes/agnes.jpg"},
-    {nombre: "Antiarrugas", precio: 250, img: "./Imagenes/cremaAntiarrugas.webp"},
-    {nombre: "Vichy", precio: 300, img: "./Imagenes/vichy.jpg"},
+    {id: 1, nombre: "Supreme Plus", precio: 50, img: "./Imagenes/supremePlus.webp", cantidad: 1},
+    {id: 2, nombre: "Revitalift", precio: 100, img: "./Imagenes/cremaRevitalift.webp", cantidad: 1},
+    {id: 3, nombre: "Garnier", precio: 150, img: "./Imagenes/garnier.webp", cantidad: 1},
+    {id: 4, nombre: "Agnes", precio: 200, img: "./Imagenes/agnes.jpg", cantidad: 1},
+    {id: 5, nombre: "Antiarrugas", precio: 250, img: "./Imagenes/cremaAntiarrugas.webp", cantidad: 1},
+    {id: 6, nombre: "Vichy", precio: 300, img: "./Imagenes/vichy.jpg", cantidad: 1},
 ];
-let carrito = [];
+let carrito = JSON.parse (localStorage.getItem ("carrito")) || [];
 const shopContent = document.querySelector (".shop-content");
 let boton = document.querySelectorAll ('.boton');
 const verCarrito = document.querySelector ('.header__cartIcon');
 const modal = document.querySelector ('.modal-container');
+const cantidadCarrito = document.querySelector ('.header__cart--notificacion');
 
 productos.forEach ((producto) => {
     let content = document.createElement ("div");
@@ -29,15 +30,28 @@ productos.forEach ((producto) => {
     content.append (comprar);
     
     comprar.addEventListener ("click", () => {
-        carrito.push ({
-            img: producto.img,
-            nombre: producto.nombre,
-            precio: producto.precio,
-        });
-    })
+        const repetido = carrito.some ((productoRepetido) => productoRepetido.id === producto.id);
+        if (repetido){
+            carrito.map ((prod) => {
+                if (prod.id === producto.id){
+                    prod.cantidad++;
+                };
+            });
+        }else{
+            carrito.push ({
+                id: producto.id,
+                img: producto.img,
+                nombre: producto.nombre,
+                precio: producto.precio,
+                cantidad: producto.cantidad,
+            });
+        };
+        contadorCarrito ();
+        guardarLocal ();
+    });
 });
 
-verCarrito.addEventListener (("click"), () => {
+const pintarCarrito = () => {
     modal.innerHTML = "";
     modal.style.display = "flex";
     const modalHeader = document.createElement ("div");
@@ -61,14 +75,46 @@ verCarrito.addEventListener (("click"), () => {
             <img src = "${producto.img}">
             <h3>${producto.nombre} </h3>
             <p>$ ${Number (producto.precio)} </p>
+            <p>Cantidad: ${producto.cantidad}</p>
+            <span class = "borrar-producto">X</span>
         `;
         modal.append (contenidoCarrito);
+
+        let eliminar = contenidoCarrito.querySelector (".borrar-producto");
+
+        eliminar.addEventListener ("click", () => {
+            eliminarProducto (producto.id);
+        });
     });    
 
-    const total = carrito.reduce((acc, el) => acc + el.precio, 0);
+    const total = carrito.reduce((acc, el) => acc + el.precio * el.cantidad, 0);
     const totalCompra = document.createElement ("div");
     totalCompra.className = "total-content";
     totalCompra.innerHTML = `Total a pagar: $ ${total}`;
     modal.append (totalCompra);
-});
+};
 
+verCarrito.addEventListener (("click"), pintarCarrito);
+
+const eliminarProducto = (id) => {
+    const encontrarId = carrito.find ((elemento) => elemento.id === id);
+    carrito = carrito.filter ((carritoId) => {
+        return carritoId !== encontrarId;
+    });
+    contadorCarrito ();
+    guardarLocal ();
+    pintarCarrito ();
+};
+
+const contadorCarrito = () => {
+    cantidadCarrito.style.display = "block";
+    const numeroCarrito = carrito.length;
+    localStorage.setItem ("numeroCarrito", JSON.stringify (numeroCarrito));
+    cantidadCarrito.innerText = JSON.parse (localStorage.getItem ("numeroCarrito"));
+};
+
+const guardarLocal = () => {
+    localStorage.setItem ("carrito", JSON.stringify (carrito));
+};
+
+contadorCarrito ();
