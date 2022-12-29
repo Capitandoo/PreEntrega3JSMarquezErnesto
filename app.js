@@ -9,10 +9,9 @@ const productos = [
 ];
 let carrito = JSON.parse (localStorage.getItem ("carrito")) || [];
 const shopContent = document.querySelector (".shop-content");
-let boton = document.querySelectorAll ('.boton');
-const verCarrito = document.querySelector ('.header__cartIcon');
+const verCarrito = document.querySelector ('.verCarrito');
 const modal = document.querySelector ('.modal-container');
-const cantidadCarrito = document.querySelector ('.header__cart--notificacion');
+const cantidadCarrito = document.querySelector ('.notificacionCarrito');
 
 productos.forEach ((producto) => {
     let content = document.createElement ("div");
@@ -60,7 +59,7 @@ const pintarCarrito = () => {
     modal.append (modalHeader);
 
     const modalBorrar = document.createElement ("h2");
-    modalBorrar.className = "modal-borrar";
+    modalBorrar.className = "modal-header-button";
     modalBorrar.innerText = "X";
     modalHeader.append (modalBorrar);
 
@@ -70,7 +69,7 @@ const pintarCarrito = () => {
 
     carrito.forEach ((producto) => {
         let contenidoCarrito = document.createElement ("div");
-        contenidoCarrito.className = "modal-container";
+        contenidoCarrito.className = "modal-content";
         contenidoCarrito.innerHTML = `
             <img src = "${producto.img}">
             <h3>${producto.nombre} </h3>
